@@ -1,0 +1,31 @@
+server:
+  port: 8089
+  servlet:
+    #访问项目名
+    context-path: /service
+spring:
+  application:
+    name: socket-server
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.138.128:8848
+        file-extension: yaml
+        username: nacos
+        password: nacos
+        enabled: true
+        namespace: public
+        #group: DEFAULT_GROUP
+        encode: UTF-8
+        timeout: 10000
+        #context-path: /nacos
+        refresh-enabled: true
+      discovery:
+        server-addr: 192.168.138.128:8848
+  profiles:
+    active: dev
+logging:
+  level:
+    com.alibaba.nacos: warn
+  pattern:
+    level: error
