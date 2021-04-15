@@ -2,7 +2,6 @@ package com.socket.server.socket;
 
 
 import com.socket.server.config.Config;
-import com.socket.server.config.ServerChannelInitializer;
 import com.socket.server.zookeeper.ServiceRegistry;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

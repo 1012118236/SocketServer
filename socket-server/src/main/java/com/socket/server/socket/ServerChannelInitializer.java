@@ -1,4 +1,4 @@
-package com.socket.server.config;
+package com.socket.server.socket;
 
 
 import com.socket.server.socket.MessagePacketDecoder;
@@ -26,6 +26,13 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
     @Autowired
     private TCPServerHandler tcpServerHandler;
 
+    @Autowired
+    private MessagePacketDecoder messagePacketDecoder;
+
+    @Autowired
+    private MessagePacketEncoder messagePacketEncoder;
+
+
     public ServerChannelInitializer() throws InterruptedException {
     }
 
@@ -41,11 +48,11 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 //                        Unpooled.copiedBuffer(new byte[] { 0x7e })));
         //自定义编解码器
         pipeline.addLast(
-                new MessagePacketDecoder(),
-                new MessagePacketEncoder()
+                messagePacketDecoder,
+                messagePacketEncoder
         );
         //自定义Hadler
-        pipeline.addLast("handler",tcpServerHandler);
+        pipeline.addLast("handler", tcpServerHandler);
         //自定义Hander,可用于处理耗时操作，不阻塞IO处理线程
 //        pipeline.addLast(group,"BussinessHandler",new BussinessHandler());
     }

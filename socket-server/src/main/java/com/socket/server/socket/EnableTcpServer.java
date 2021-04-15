@@ -26,12 +26,4 @@ public class EnableTcpServer implements CommandLineRunner {
         }
     }
 
-    public TCPServer getTcpServer() {
-        return tcpServer;
-    }
-
-    public void setTcpServer(TCPServer tcpServer) {
-        this.tcpServer = tcpServer;
-    }
-
 }

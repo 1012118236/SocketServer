@@ -5,6 +5,8 @@ server:
     context-path: /service
 tcpServer:
   enable: true
+zookeeper:
+  address: 192.168.138.128:2181
 spring:
   application:
     name: socket-server
