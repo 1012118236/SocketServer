@@ -1,9 +1,5 @@
 package com.socket.server.socket;
 
-
-import com.socket.server.socket.MessagePacketDecoder;
-import com.socket.server.socket.MessagePacketEncoder;
-import com.socket.server.socket.TCPServerHandler;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -12,8 +8,6 @@ import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -25,13 +19,6 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 
     @Autowired
     private TCPServerHandler tcpServerHandler;
-
-    @Autowired
-    private MessagePacketDecoder messagePacketDecoder;
-
-    @Autowired
-    private MessagePacketEncoder messagePacketEncoder;
-
 
     public ServerChannelInitializer() throws InterruptedException {
     }
@@ -48,11 +35,11 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 //                        Unpooled.copiedBuffer(new byte[] { 0x7e })));
         //自定义编解码器
         pipeline.addLast(
-                messagePacketDecoder,
-                messagePacketEncoder
+                new MessagePacketDecoder(),
+                new MessagePacketEncoder()
         );
         //自定义Hadler
-        pipeline.addLast("handler", tcpServerHandler);
+        pipeline.addLast("handler",tcpServerHandler);
         //自定义Hander,可用于处理耗时操作，不阻塞IO处理线程
 //        pipeline.addLast(group,"BussinessHandler",new BussinessHandler());
     }

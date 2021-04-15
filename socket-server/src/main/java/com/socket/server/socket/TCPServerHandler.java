@@ -1,6 +1,8 @@
 package com.socket.server.socket;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.socket.server.model.Demo;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -44,7 +46,11 @@ public class TCPServerHandler extends ChannelInboundHandlerAdapter {
     @Transactional
     public void meterTaskList(ConsumerRecord<?, ?> record) {
         Object value = record.value();
-        System.out.println("kafka message is :" +value.toString());
+        if(value!=null){
+            Demo demo = JSONObject.parseObject(value.toString(), Demo.class);
+            System.out.println("kafka message is :" + demo.toString());
+
+        }
     }
 
     public  KafkaTemplate getKafkaTemplate() {

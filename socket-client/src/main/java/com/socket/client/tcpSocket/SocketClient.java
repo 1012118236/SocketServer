@@ -9,7 +9,7 @@ public class SocketClient {
 
     private void SocketClient(){}
 
-    public void sendSocket(Object message){
+    public void sendSocket(String message){
         ServiceDiscovery serviceDiscovery = new ServiceDiscovery(ZookeeperConf.discoveryAddress);
         String serverAddress = serviceDiscovery.discover();
         if (serverAddress!=null) {
@@ -18,11 +18,7 @@ public class SocketClient {
                 String host = array[0];
                 String port = array[1];
                 //log.info(" netty server path is {}",serverAddress);
-                for (int i = 0; i <5000 ; i++) {
-                    TCPUtil.sendTCPRequest(host,port,"hello"+i,"UTF-8");
-
-                }
-
+                TCPUtil.sendTCPRequest(host,port,message,"UTF-8");
             }
         }
     }
