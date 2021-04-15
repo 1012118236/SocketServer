@@ -11,25 +11,28 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
 @Component
+@Slf4j
 public class TCPServer {
-    private Logger log = LoggerFactory.getLogger(getClass());
     //本地socket服务器地址
-    private String host = "192.168.11.37";
+    private String host;
     //服务器运行状态
     private volatile boolean isRunning = false;
     //处理Accept连接事件的线程，这里线程数设置为1即可，netty处理链接事件默认为单线程，过度设置反而浪费cpu资源
     private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     //处理hadnler的工作线程，其实也就是处理IO读写 。线程数据默认为 CPU 核心数乘以2
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+    @Value("${zookeeper.address}")
+    private String zkAddress;
+
     //zookeeper 配置
-    private ServiceRegistry serviceRegistry = new ServiceRegistry("192.168.138.128:2181");
+    private ServiceRegistry serviceRegistry;
 
     @Autowired
     private Config config;
@@ -56,11 +59,11 @@ public class TCPServer {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.SO_BACKLOG, 128)
+                .option(ChannelOption.SO_BACKLOG, 1024)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childHandler(serverChannelInitializer);
-
+        //获取本地IP 和 服务端口
         InetAddress localHost = InetAddress.getLocalHost();
         this.host = localHost.getHostAddress();
         int i = Integer.parseInt(config.getPort());
@@ -68,10 +71,11 @@ public class TCPServer {
         if (future.isSuccess()) {
             log.info("server start...");
         }
-        if (serviceRegistry != null) {
-            serviceRegistry.register(host + ":" + config.getPort());
+        if (serviceRegistry == null) {
+            serviceRegistry = new ServiceRegistry(zkAddress);
         }
-
+        //向zk 注册服务 地址
+        serviceRegistry.register(host + ":" + config.getPort());
 
       /*  //创建ServerBootstrap实例
         ServerBootstrap serverBootstrap=new ServerBootstrap();
