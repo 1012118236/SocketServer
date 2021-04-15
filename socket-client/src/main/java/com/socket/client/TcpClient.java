@@ -12,7 +12,9 @@ public class TcpClient {
 
 
     public static void main(String[] args) throws IOException {
-        new SocketClient().sendSocket(new Demo());
+        Demo demo = new Demo();
+        demo.setName("shenjiang");
+        new SocketClient().sendSocket(demo);
 
     }
 

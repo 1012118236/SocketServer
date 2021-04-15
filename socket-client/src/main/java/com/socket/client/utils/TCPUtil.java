@@ -1,9 +1,6 @@
 package com.socket.client.utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.HashMap;
@@ -22,9 +19,9 @@ public class TCPUtil {
      * @param reqCharset 该方法与远程主机间通信报文的编码字符集(编码为byte[]发送到Server)
      * @return localPort--本地绑定的端口,reqData--请求报文,respData--响应报文,respDataHex--远程主机响应的原始字节的十六进制表示
      */
-    public static Map<String, Object> sendTCPRequest(String IP, String port, Object object, String reqCharset){
+    public static Map<String, Object> sendTCPRequest(String IP, String port, String object, String reqCharset){
         Map<String, Object> respMap = new HashMap<String, Object>();
-        ObjectOutputStream out = null;      //写
+        OutputStream out = null;      //写
         InputStream in = null;        //读
         String localPort = null;      //本地绑定的端口(java socket, client, /127.0.0.1:50804 => /127.0.0.1:9901)
         String respData = null;       //响应报文
@@ -43,8 +40,8 @@ public class TCPUtil {
             /**
              * 发送TCP请求
              */
-            out = new ObjectOutputStream(socket.getOutputStream());
-            out.writeObject(object);
+            out = socket.getOutputStream();
+            out.write(object.getBytes());
             /**
              * 接收TCP响应
              */

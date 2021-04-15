@@ -1,5 +1,6 @@
 package com.socket.server.model;
 
+
 import java.io.Serializable;
 
 public class Demo implements Serializable {

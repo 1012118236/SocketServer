@@ -34,6 +34,9 @@ public class TCPServer {
     @Autowired
     private Config config;
 
+    @Autowired
+    private ServerChannelInitializer serverChannelInitializer;
+
     public TCPServer() {}
 
     /**
@@ -56,7 +59,7 @@ public class TCPServer {
                 .option(ChannelOption.SO_BACKLOG, 128)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
-                .childHandler(new ServerChannelInitializer());
+                .childHandler(serverChannelInitializer);
 
         InetAddress localHost = InetAddress.getLocalHost();
         this.host = localHost.getHostAddress();
@@ -119,4 +122,11 @@ public class TCPServer {
         return "TCP-Server";
     }
 
+    public ServerChannelInitializer getServerChannelInitializer() {
+        return serverChannelInitializer;
+    }
+
+    public void setServerChannelInitializer(ServerChannelInitializer serverChannelInitializer) {
+        this.serverChannelInitializer = serverChannelInitializer;
+    }
 }

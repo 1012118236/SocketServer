@@ -10,28 +10,13 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class ServerApplication implements CommandLineRunner {
+public class ServerApplication {
 
-    @Autowired
-    TCPServer tcpServer;
+
 
     public static void main(String[] args) {
         SpringApplication.run(ServerApplication.class, args);
-
-
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        System.out.println(1);
-        tcpServer.startServer();
-    }
 
-    public TCPServer getTcpServer() {
-        return tcpServer;
-    }
-
-    public void setTcpServer(TCPServer tcpServer) {
-        this.tcpServer = tcpServer;
-    }
 }

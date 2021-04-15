@@ -11,5 +11,8 @@
 
     <artifactId>socket-data</artifactId>
 
+    <dependencies>
+
+    </dependencies>
 
 </project>

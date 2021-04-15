@@ -3,9 +3,25 @@ server:
   servlet:
     #访问项目名
     context-path: /service
+tcpServer:
+  enable: true
 spring:
   application:
     name: socket-server
+  kafka:
+    bootstrap-servers: 192.168.138.128:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    #      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: test
+      enable-auto-commit: true
+      auto-commit-interval: 1000
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      log-container-config: false
   cloud:
     nacos:
       config:

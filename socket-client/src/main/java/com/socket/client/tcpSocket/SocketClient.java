@@ -18,7 +18,7 @@ public class SocketClient {
                 String host = array[0];
                 String port = array[1];
                 //log.info(" netty server path is {}",serverAddress);
-                TCPUtil.sendTCPRequest(host,port,message,"UTF-8");
+                TCPUtil.sendTCPRequest(host,port,"hello","UTF-8");
 
             }
         }

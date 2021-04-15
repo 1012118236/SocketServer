@@ -11,6 +11,9 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -19,6 +22,9 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     static final EventExecutorGroup group = new DefaultEventExecutorGroup(2);
+
+    @Autowired
+    private TCPServerHandler tcpServerHandler;
 
     public ServerChannelInitializer() throws InterruptedException {
     }
@@ -39,8 +45,16 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
                 new MessagePacketEncoder()
         );
         //自定义Hadler
-        pipeline.addLast("handler",new TCPServerHandler());
+        pipeline.addLast("handler",tcpServerHandler);
         //自定义Hander,可用于处理耗时操作，不阻塞IO处理线程
 //        pipeline.addLast(group,"BussinessHandler",new BussinessHandler());
+    }
+
+    public TCPServerHandler getTcpServerHandler() {
+        return tcpServerHandler;
+    }
+
+    public void setTcpServerHandler(TCPServerHandler tcpServerHandler) {
+        this.tcpServerHandler = tcpServerHandler;
     }
 }
